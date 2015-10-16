@@ -1,4 +1,4 @@
-package com.qianmi.notrxjava.withrxjava;
+package com.qianmi.withrxjava;
 
 import android.net.Uri;
 
