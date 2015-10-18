@@ -24,7 +24,7 @@ public final class JwtInterceptor implements Interceptor {
         Request.Builder builder = chain.request().newBuilder();
 
         if (accessToken.isSet()) {
-            builder.header("Authorization", "token " + accessToken.get());
+            builder.header("Authorization", String.format("%s %s", "JWT", accessToken.get()));
         }
 
         return chain.proceed(builder.build());

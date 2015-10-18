@@ -5,7 +5,7 @@ import android.content.Context;
 import dagger.ObjectGraph;
 
 public final class Injector {
-    private static final String INJECTOR_SERVICE = "com.jakewharton.u2020.injector";
+    private static final String INJECTOR_SERVICE = "com.qianmi.newdemo.injector";
 
     @SuppressWarnings({"ResourceType", "WrongConstant"}) // Explicitly doing a custom service.
     public static ObjectGraph obtain(Context context) {

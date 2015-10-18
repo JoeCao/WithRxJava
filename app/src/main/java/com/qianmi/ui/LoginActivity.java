@@ -29,10 +29,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.qianmi.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.qianmi.notrxjava.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -194,7 +195,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return true;
+//        return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {

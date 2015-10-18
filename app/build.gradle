@@ -16,6 +16,7 @@ buildscript {
 
         classpath 'me.tatarka:gradle-retrolambda:3.2.3'
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 
     }
     // Exclude the lombok version that the android plugin depends on.
@@ -23,17 +24,21 @@ buildscript {
 }
 
 apply plugin: 'com.android.application'
+//用于retrofit的lambda
 apply plugin: 'me.tatarka.retrolambda'
+
+apply plugin: 'com.neenbedankt.android-apt'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.qianmi.notrxjava"
-        minSdkVersion 18
+        applicationId "com.qianmi.newdemo"
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "com.qianmi.data.api.notrxjava.NewDemoTestRunner"
     }
     buildTypes {
         release {
@@ -60,16 +65,32 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    testCompile 'com.google.truth:truth:0.27'
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:design:23.1.0'
     compile 'io.reactivex:rxjava:1.0.14'
     compile 'io.reactivex:rxandroid:1.0.1'
     compile 'com.squareup.dagger:dagger:1.2.2'
-    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    apt 'com.squareup.dagger:dagger-compiler:1.2.2'
+    //图片缓存
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
+    //json转换相关
     compile 'com.squareup.retrofit:converter-moshi:2.0.0-beta2'
     compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.0'
+    //最好用的httpclient
     compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile 'com.google.guava:guava:18.0'
+    //用于时间转换
+    compile 'com.jakewharton.threetenabp:threetenabp:1.0.2'
+    //换算byte比较方便
+    compile 'com.jakewharton.byteunits:byteunits:0.9.1'
+    //安卓单元测试套件
+    androidTestCompile 'junit:junit:4.12'
+    androidTestCompile 'com.android.support:support-annotations:23.1.0'
+    androidTestCompile 'com.android.support.test:runner:0.4.1'
+    androidTestCompile 'com.android.support.test:rules:0.4.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
 }
+

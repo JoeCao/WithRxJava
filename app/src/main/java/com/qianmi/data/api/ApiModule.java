@@ -1,6 +1,7 @@
 package com.qianmi.data.api;
 
 import com.qianmi.data.api.jwt.JwtInterceptor;
+import com.qianmi.data.api.jwt.JwtService;
 import com.squareup.moshi.Moshi;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
@@ -18,7 +19,7 @@ import retrofit.RxJavaCallAdapterFactory;
         complete = false,
         library = true,
         injects = {
-                JwtInterceptor.class
+                JwtService.class
         }
 )
 public final class ApiModule {

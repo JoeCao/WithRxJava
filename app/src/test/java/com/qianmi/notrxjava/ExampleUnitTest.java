@@ -1,4 +1,4 @@
-package com.qianmi.notrxjava;
+package com.qianmi.data.api.notrxjava;
 
 import org.junit.Test;
 
