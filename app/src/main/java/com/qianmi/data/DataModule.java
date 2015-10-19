@@ -7,14 +7,19 @@ import android.content.SharedPreferences;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.qianmi.data.api.ApiModule;
+import com.qianmi.data.api.bean.PriceChange;
 import com.qianmi.data.api.jwt.AccessToken;
+import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 
 import org.threeten.bp.Clock;
 
 import java.io.File;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import javax.inject.Singleton;
 
@@ -57,9 +62,12 @@ public class DataModule {
     @Provides
     @Singleton
     Moshi provideMoshi() {
-        return new Moshi.Builder()
+        Moshi moshi = new Moshi.Builder()
                 .add(new InstantAdapter())
                 .build();
+
+        return moshi;
+
     }
 
     @Provides

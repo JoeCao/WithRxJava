@@ -19,7 +19,7 @@ import retrofit.RxJavaCallAdapterFactory;
         complete = false,
         library = true,
         injects = {
-                JwtService.class
+                JwtService.class,
         }
 )
 public final class ApiModule {

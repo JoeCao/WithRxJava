@@ -3,6 +3,7 @@ package com.qianmi;
 import android.app.Application;
 
 import com.qianmi.data.DataModule;
+import com.qianmi.data.api.NewService;
 
 import javax.inject.Singleton;
 
@@ -18,13 +19,14 @@ import dagger.Provides;
                 DataModule.class
         },
         injects = {
-                NewDemoApplication.class
+                NewDemoApplication.class,
+                NewService.class
         }
 )
 public class NewDemoModule {
-    private final NewDemoApplication app;
+    private final Application app;
 
-    public NewDemoModule(NewDemoApplication app) {
+    public NewDemoModule(Application app) {
         this.app = app;
     }
 
