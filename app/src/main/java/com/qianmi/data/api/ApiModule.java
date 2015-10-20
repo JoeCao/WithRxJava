@@ -52,8 +52,8 @@ public final class ApiModule {
 
     @Provides
     @Singleton
-    PriceChangeService providePriceChangeService(Retrofit retrofit) {
-        return retrofit.create(PriceChangeService.class);
+    RemoteInterface providePriceChangeService(Retrofit retrofit) {
+        return retrofit.create(RemoteInterface.class);
     }
 
     static OkHttpClient createApiClient(OkHttpClient client, JwtInterceptor oauthInterceptor) {

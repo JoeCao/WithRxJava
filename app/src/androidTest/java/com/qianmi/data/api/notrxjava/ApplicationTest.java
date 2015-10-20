@@ -3,10 +3,6 @@ package com.qianmi.data.api.notrxjava;
 import android.app.Application;
 import android.test.ApplicationTestCase;
 
-import com.qianmi.data.api.PriceChangeService;
-
-import javax.inject.Inject;
-
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
  */
