@@ -7,6 +7,9 @@ import com.qianmi.data.api.bean.LoginRequest;
 import com.qianmi.data.api.bean.PriceChange;
 import com.qianmi.data.api.bean.PriceChangeListResult;
 import com.qianmi.data.api.bean.Token;
+import com.qianmi.data.api.bean.Trade;
+import com.qianmi.data.api.bean.TradeDetail;
+import com.qianmi.data.api.bean.TradeListResult;
 import com.qianmi.data.api.jwt.AccessToken;
 
 import java.util.List;
@@ -47,6 +50,26 @@ public class NewService {
         }));
 
 
+    }
+
+    public void printTradeFullAddress() {
+        Observable<Result<TradeListResult>> ret = remoteInterface.listTrades(null).share();
+        subscriptions.add(ret.filter(Results.isSuccess())
+                .flatMap(result -> {
+                    TradeListResult tResult = result.response().body();
+                    List<Trade> list = tResult.results;
+                    return Observable.from(list);
+                })
+                .flatMap(trade -> remoteInterface.fetchTrade(trade.tid))
+                .subscribe(
+                        resultObservable -> {
+                            TradeDetail tradeDetail = resultObservable.response().body();
+                            Log.d(TAG, "地址是" + tradeDetail.getFullAddress());
+                        }
+                ));
+        subscriptions.add(ret.filter(Funcs.not(Results.isSuccess())).subscribe(result -> {
+            Log.e(TAG, result.response().message());
+        }));
     }
 
     public void auth() {

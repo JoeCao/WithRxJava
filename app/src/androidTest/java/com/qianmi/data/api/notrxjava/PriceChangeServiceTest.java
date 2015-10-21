@@ -37,4 +37,10 @@ public class PriceChangeServiceTest extends AndroidTestCase {
         newService.auth();
         newService.listPriceChanges();
     }
+
+    @Test
+    public void testPrintFullAddress() {
+        newService.auth();
+        newService.printTradeFullAddress();
+    }
 }
