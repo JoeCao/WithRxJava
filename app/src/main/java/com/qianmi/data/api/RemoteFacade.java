@@ -21,7 +21,7 @@ import rx.Observable;
 /**
  * Created by caozupeng on 15/10/16.
  */
-public interface RemoteInterface {
+public interface RemoteFacade {
     @GET("/changenotifys/")
     Observable<Result<PriceChangeListResult>> listPriceChanges(@Query("page") String page);
 

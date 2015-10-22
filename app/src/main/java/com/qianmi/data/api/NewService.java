@@ -26,7 +26,7 @@ import rx.subscriptions.CompositeSubscription;
 public class NewService {
     private static final String TAG = "NewService";
     @Inject
-    RemoteInterface remoteInterface;
+    RemoteFacade remoteFacade;
     @Inject
     @AccessToken
     Preference<String> accessToken;
@@ -34,7 +34,7 @@ public class NewService {
 
 
     public void listPriceChanges() {
-        Observable<Result<PriceChangeListResult>> ret = remoteInterface.listPriceChanges(null).share();
+        Observable<Result<PriceChangeListResult>> ret = remoteFacade.listPriceChanges(null).share();
         subscriptions.add(ret.filter(Results.isSuccess())
                 .flatMap(result -> {
                     PriceChangeListResult pResult = result.response().body();
@@ -53,14 +53,14 @@ public class NewService {
     }
 
     public void printTradeFullAddress() {
-        Observable<Result<TradeListResult>> ret = remoteInterface.listTrades(null).share();
+        Observable<Result<TradeListResult>> ret = remoteFacade.listTrades(null).share();
         subscriptions.add(ret.filter(Results.isSuccess())
                 .flatMap(result -> {
                     TradeListResult tResult = result.response().body();
                     List<Trade> list = tResult.results;
                     return Observable.from(list);
                 })
-                .flatMap(trade -> remoteInterface.fetchTrade(trade.tid))
+                .flatMap(trade -> remoteFacade.fetchTrade(trade.tid))
                 .subscribe(
                         resultObservable -> {
                             TradeDetail tradeDetail = resultObservable.response().body();
@@ -73,7 +73,7 @@ public class NewService {
     }
 
     public void auth() {
-        Observable<Result<Token>> ret = remoteInterface.authToken(new LoginRequest("caozupeng", "caozupeng"));
+        Observable<Result<Token>> ret = remoteFacade.authToken(new LoginRequest("caozupeng", "caozupeng"));
         subscriptions.add(ret.filter(Results.isSuccess()).map(result -> {
             Token token = result.response().body();
             return token;

@@ -12,5 +12,5 @@ import com.qianmi.data.api.ApiModule;
 
 @Component(modules = {ApiModule.class})
 public class ApiComponent {
-//    RemoteInterface providePriceChangeService(Retrofit retrofit);
+//    RemoteFacade providePriceChangeService(Retrofit retrofit);
 }
