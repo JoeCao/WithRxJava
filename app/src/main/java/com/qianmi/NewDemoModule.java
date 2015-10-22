@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.qianmi.data.DataModule;
 import com.qianmi.data.api.NewService;
+import com.qianmi.ui.UIModule;
 
 import javax.inject.Singleton;
 
@@ -16,7 +17,8 @@ import dagger.Provides;
 
 @Module(
         includes = {
-                DataModule.class
+                DataModule.class,
+                UIModule.class
         },
         injects = {
                 NewDemoApplication.class,

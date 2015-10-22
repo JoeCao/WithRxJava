@@ -27,4 +27,8 @@ public class NewDemoApplication extends android.app.Application {
         return super.getSystemService(name);
     }
 
+    public void inject(Object object) {
+        objectGraph.inject(object);
+    }
+
 }

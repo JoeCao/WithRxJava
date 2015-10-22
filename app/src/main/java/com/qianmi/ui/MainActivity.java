@@ -2,22 +2,44 @@ package com.qianmi.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.qianmi.NewDemoApplication;
 import com.qianmi.R;
+import com.qianmi.data.api.Funcs;
+import com.qianmi.data.api.RemoteFacade;
+import com.qianmi.data.api.Results;
+import com.qianmi.data.api.bean.PriceChange;
+import com.qianmi.data.api.bean.PriceChangeListResult;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.ObjectGraph;
+import retrofit.Result;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = "MainActivity";
+    @Inject
+    RemoteFacade remoteFacade;
+    private final CompositeSubscription subscriptions = new CompositeSubscription();
+    private ObjectGraph activityGraph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +49,10 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(
+                view -> Snackbar
+                        .make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -43,6 +62,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //使用Application将依赖注入
+        ((NewDemoApplication) getApplication()).inject(this);
+        testNetwork();
     }
 
     @Override
@@ -100,5 +122,26 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void testNetwork() {
+        Observable<Result<PriceChangeListResult>> ret = remoteFacade.listPriceChanges(null).share()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        subscriptions.add(ret.filter(Results.isSuccess())
+                .flatMap(result -> {
+                    PriceChangeListResult pResult = result.response().body();
+                    List<PriceChange> list = pResult.results;
+                    Log.d(TAG, "size is " + list.size());
+                    return Observable.from(list);
+                })
+                .subscribe(priceChange -> {
+                    Log.d(TAG, priceChange.gonghuo_product_name);
+                }));
+        subscriptions.add(ret.filter(Funcs.not(Results.isSuccess()))
+                .subscribe(result -> {
+                    Log.e(TAG, result.response().message());
+                }));
     }
 }
